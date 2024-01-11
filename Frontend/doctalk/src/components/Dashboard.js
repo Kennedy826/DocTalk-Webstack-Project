@@ -1,11 +1,12 @@
+
 import React from 'react';
 import { Routes, Route, useLocation, useParams } from 'react-router-dom';
 import Profile from './Profile';
 import NotificationBar from './NotificationBar';
-import ChatArea from './ChatArea';
+import Chats from './Chats'
 import Sidebar from './Sidebar';
+import Chatroom from './Chatroom';
 import { ChannelsHome, ChannelsDetails } from './Channels';
-import Navbar from './Navbar';
 
 const Dashboard = () => {
   // Get the current location using useLocation hook from react-router-dom
@@ -15,22 +16,20 @@ const Dashboard = () => {
   return (
     <div className="flex h-screen">
       <Sidebar />
-      <div className="flex-1 flex flex-col">
-        {isHomePage && <Navbar />} {/* Render Navbar only on the home page */}
+      <div className="flex-1 flex flex-col items-center justify-center">
         <div className="flex flex-col flex-grow overflow-hidden">
           <NotificationBar />
           <div className="flex">
             {/* Content Area */}
             <Routes>
-              {/* DashboardHome */}
-              {/* <Route path="/" element={<DashboardHome />} /> */}
-              {/* Profile */}
               <Route path="/profile" element={<Profile />} />
               {/* Channels - Nested routes */}
               <Route path="channels/*" element={<ChannelContent />} />
+              <Route path="/Chatroom" element={<Chatroom />} />
+              <Route path="/chats/*" element={<Chats />} />
             </Routes>
           </div>
-          <ChatArea />
+          <Chats />
         </div>
       </div>
     </div>

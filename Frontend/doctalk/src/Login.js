@@ -1,3 +1,76 @@
+// import React, { useState } from "react";
+// import axios from 'axios';
+// import { useNavigate } from 'react-router-dom';
+
+// import "./Login.css";
+
+// function Login({ setLoggedIn, setEmail }) {
+//   const [errorMessages, setErrorMessages] = useState({});
+//   const [isSubmitted, setIsSubmitted] = useState(false);
+//   const navigate = useNavigate();
+
+//   const handleSubmit = async (event) => {
+//     event.preventDefault();
+//     const formData = new FormData(event.target);
+//     const userData = {
+//       email: formData.get('email'),
+//       password: formData.get('pass')
+//     };
+
+//     try {
+//       const response = await axios.post('http://127.0.0.1:5000/login', userData);
+//       console.log('User logged in:', response.data);
+
+//       setLoggedIn(true);
+//       setEmail(formData.get('email'));
+//       setIsSubmitted(true); // Update state to show success message
+
+//       navigate('/dashboard');
+//     } catch (error) {
+//       console.error('Login error:', error);
+//       // Handle login errors or set error messages accordingly
+//       setErrorMessages({ message: 'Invalid email or password' });
+//     }
+//   };
+
+//   const renderErrorMessage = () => (
+//     <div className="error">{errorMessages.message}</div>
+//   );
+
+//   const renderForm = (
+//     <div className="form">
+//       <form onSubmit={handleSubmit}>
+//         <div className="input-container">
+//           <label>Email </label>
+//           <input type="text" name="email" required />
+//         </div>
+//         <div className="input-container">
+//           <label>Password </label>
+//           <input type="password" name="pass" required />
+//           {renderErrorMessage()}
+//         </div>
+//         <div className="button-container">
+//           <input type="submit" value="Submit" />
+//         </div>
+//       </form>
+//     </div>
+//   );
+
+//   return (
+//     <div className="app">
+//       <div className="login-form">
+//         <div className="title">Sign In</div>
+//         {isSubmitted ? <div>User is successfully logged in</div> : renderForm}
+//       </div>
+//     </div>
+//   );
+// }
+
+// export default Login;
+
+
+
+
 import React, { useState } from "react";
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
@@ -38,7 +111,7 @@ function Login({ setLoggedIn, setEmail }) {
     };
 
     // Send user credentials to the server for login
-    axios.post('http://127.0.0.1:5000/login', userData)
+    axios.get('http://127.0.0.1:5000/login', userData)
       .then(response => {
         // Handle successful login response
         console.log('User logged in:', response.data);
