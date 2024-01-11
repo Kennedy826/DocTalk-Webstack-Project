@@ -3,7 +3,7 @@ import Home from "./home";
 import Login from './Login';
 import Navbar from './Navbar';
 import Signup from './Signup';
-import Dashboard from './components/Dashboard'
+import Dashboard from './components/Dashboard';
 import axios from 'axios';
 import { useEffect, useState } from 'react';
 
@@ -43,7 +43,7 @@ function App() {
           <Route path="/" element={<Home email={email} loggedIn={loggedIn} setLoggedIn={setLoggedIn} />} />
           <Route path="/login" element={<Login setLoggedIn={setLoggedIn} setEmail={setEmail} />} />
           <Route path="/signup"  element={<Signup /> } />
-          <Route path="/footer" element={<footer />} />
+          
           {loggedIn ? <Route path="/" element={<Navigate to="/dashboard" />} /> : <Route path="/" element={<Navigate to="/login" />} />}
           <Route path="/dashboard" element={loggedIn ? <Dashboard /> : <Navigate to="/login" />} />
         </Routes> 

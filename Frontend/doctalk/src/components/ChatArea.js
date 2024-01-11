@@ -1,51 +1,58 @@
-import React, { useState, useEffect } from 'react';
-import io from 'socket.io-client';
+// ChatArea.js
+import React, { useEffect } from 'react';
+import { useParams } from 'react-router-dom';
 
-const ChatArea = () => {
-  const [inputMessage, setInputMessage] = useState('');
-  const [messages, setMessages] = useState([
-    { id: 2, sender: 'Mahbub', text: 'Hi there!' },
-
-  ]);
-  const [socket, setSocket] = useState(null);
-
-  useEffect(() => {
-    const newSocket = io('http://localhost:5000'); // Replace with your backend server URL
-    setSocket(newSocket);
-
-    return () => {
-      newSocket.disconnect(); // Clean up on unmount
-    };
-  }, []);
+const ChatArea = ({
+  selectedDoctor,
+  setSelectedDoctor,
+  messages,
+  setMessages,
+  inputMessage,
+  sendMessage,
+  setInputMessage,
+  doctors,
+}) => {
+  const { doctorId } = useParams();
 
   useEffect(() => {
-    if (socket) {
-      socket.on('message', (data) => {
-        // Handle received messages and update state
-        setMessages([...messages, data]);
-      });
+    if (!selectedDoctor || !doctors || !doctors.length) {
+      return;
     }
-  }, [socket, messages]);
 
-  const sendMessage = () => {
-    if (inputMessage.trim() !== '' && socket) {
-      const newMessage = {
-        id: messages.length + 1,
-        sender: 'You', // Assuming the sender is the current user
-        text: inputMessage.trim(),
-      };
-
-      socket.emit('message', newMessage); // Emit the message to the server
-
-      setMessages([...messages, newMessage]);
-      setInputMessage('');
+    // If the selectedDoctor is not set or the doctorId in the URL doesn't match, set the selectedDoctor
+    if (!selectedDoctor || selectedDoctor.id !== parseInt(doctorId, 10)) {
+      // Fetch the doctor with the corresponding ID
+      const doctor = doctors.find((doctor) => doctor.id === parseInt(doctorId, 10));
+      if (doctor) {
+        setSelectedDoctor(doctor);
+        setMessages([]); // Clear previous chat messages
+      }
     }
-  };
+  }, [doctorId, selectedDoctor, setSelectedDoctor, setMessages, doctors]);
 
   return (
-        <div className="flex  items-center justify-center flex-1 h-screen  overflow-y-auto bg-gray-100 p-4">
+    <div className="flex-1 flex flex-col space-y-5">
       <div className="flex flex-col space-y-5">
-        {messages.map(message => (
+        {/* Doctor Info */}
+        <div className="flex flex-col">
+          <h2 className="text-xl font-bold mb-4">
+         {selectedDoctor && selectedDoctor.name}
+          </h2>
+          {selectedDoctor && (
+            <div className="p-2 border rounded">
+              <p className="text-sm font-semibold">{selectedDoctor.name}</p>
+              <p className="text-xs text-gray-500">{selectedDoctor.profession}</p>
+              {selectedDoctor.online ? (
+                <span className="text-xs text-green-500">Online</span>
+              ) : (
+                <span className="text-xs text-red-500">Offline</span>
+              )}
+            </div>
+          )}
+        </div>
+
+        {/* Chat Messages */}
+        {messages.map((message) => (
           <div key={message.id} className="flex flex-col">
             <span className="text-gray-500 text-sm">{message.sender}</span>
             <div className="bg-white p-3 rounded-lg shadow-md">
@@ -54,27 +61,29 @@ const ChatArea = () => {
           </div>
         ))}
       </div>
+
+      {/* Message Input */}
       <div className="mt-auto">
         <form
-          onSubmit={e => {
+          onSubmit={(e) => {
             e.preventDefault();
             sendMessage();
           }}
         >
-          <div className='h-150 '>
-          <input
-            type="text"
-            placeholder="Type a message..."
-            className="w-full border rounded-lg py-2 px-3 focus:outline-none focus:border-blue-500"
-            value={inputMessage}
-            onChange={e => setInputMessage(e.target.value)}
-          />
-          <button
-            type="submit"
-            className="bg-blue-500 text-white px-4 py-2 rounded-lg mt-2 hover:bg-blue-600 focus:outline-none"
-          >
-            Send
-          </button>
+          <div className="flex items-center w-full">
+            <input
+              type="text"
+              placeholder="Type a message..."
+              className="flex-1 border rounded-lg py-2 px-3 focus:outline-none focus:border-blue-500"
+              value={inputMessage}
+              onChange={(e) => setInputMessage(e.target.value)}
+            />
+            <button
+              type="submit"
+              className="ml-2 bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 focus:outline-none"
+            >
+              Send
+            </button>
           </div>
         </form>
       </div>
@@ -83,3 +92,7 @@ const ChatArea = () => {
 };
 
 export default ChatArea;
+
+
+
+

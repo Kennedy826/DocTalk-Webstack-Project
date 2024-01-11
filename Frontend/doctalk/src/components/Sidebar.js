@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import Profile from './Profile'; // Import the Profile component
+import Profile from './Profile';
+import Chats from './Chats'
 import { ChannelsHome, ChannelsDetails } from './Channels';
 import { CgProfile } from 'react-icons/cg';
 
@@ -8,6 +9,8 @@ const Sidebar = () => {
   const [isProfileOpen, setIsProfileOpen] = useState(false);
   const [isChannelsOpen, setIsChannelsOpen] = useState(false);
   const [selectedChannelId, setSelectedChannelId] = useState(null);
+  const [isChatsOpen, setIsChatsOpen] = useState(false);
+  
 
   const toggleProfile = () => {
     setIsProfileOpen(!isProfileOpen);
@@ -15,6 +18,10 @@ const Sidebar = () => {
 
   const toggleChannels = () => {
     setIsChannelsOpen(!isChannelsOpen);
+  };
+
+  const toggleChats = () => {
+    setIsChatsOpen(!isChatsOpen); 
   };
 
   const handleChannelClick = (channelId) => {
@@ -35,6 +42,12 @@ const Sidebar = () => {
             Channels
           </span>
           {isChannelsOpen && <ChannelsHome handleChannelClick={handleChannelClick} />}
+        </li>
+        <li className="mt-4">
+          <span onClick={toggleChats} className="cursor-pointer">
+            Chats
+          </span>
+          {isChatsOpen && <Chats />} {/* Render Chats when isChatsOpen is true */}
         </li>
 
         <li className="mt-4">
